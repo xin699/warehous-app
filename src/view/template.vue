@@ -7,6 +7,8 @@
          <slot name="content"></slot>
      </div>
      <div class="footer">
+         <slot name="footer02"></slot>
+         <slot name="footer03"></slot>
          <slot name="footer"></slot>
      </div>
  </div>
@@ -28,9 +30,13 @@ export default {
         display: flex;
         flex-direction: column;
         .content{
-            overflow:auto;
+            overflow:hidden;
             -webkit-overflow-scrolling:touch;
             flex:1;
+            .over-loading {
+                margin-top: 10px;
+                color: #ccc;
+            }
         }
     }
 </style>

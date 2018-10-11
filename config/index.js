@@ -10,11 +10,32 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      "/apiv1/gyl": {
+        name: 'mainGyl',
+        // http://112.74.73.113:9090
+        target: "http://192.168.1.10:8090", //设置调用接口域名和端口号别忘了加http
+        changeOrigin: true,
+        pathRewrite: {
+          "^/apiv1/gyl": "/apiv1/gyl" //这里理解成用‘/api’代替target里面的地址，组件中我们调接口时直接用/api代替
+          // 比如我要调用'http://0.0:300/user/add'，直接写‘/api/user/add’即可 代理后地址栏显示/
+        }
+      },
+      "/gyl": {
+        // http://112.74.73.113:9090
+        name: 'espGyl',
+        target: "http://192.168.1.10:8090", //设置调用接口域名和端口号别忘了加http
+        changeOrigin: true,
+        pathRewrite: {
+          "^/gyl": "/gyl" //这里理解成用‘/api’代替target里面的地址，组件中我们调接口时直接用/api代替
+          // 比如我要调用'http://0.0:300/user/add'，直接写‘/api/user/add’即可 代理后地址栏显示/
+        }
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
-    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 9528, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,
@@ -50,7 +71,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
 
     /**
      * Source Maps

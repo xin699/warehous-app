@@ -2,21 +2,15 @@
  <div class="page">
      <v-header></v-header>
     <div class="main">
-        <table style="width: 100%">
-            <tr>
-                <td @click="warehouseing">入库作业</td>
-                <td>出库作业</td>
-                <td>补货作业</td>
-            </tr>
-            <tr>
-                <td>移库作业</td>
-                <td>流通加工作业</td>
-                <td>盘点作业</td>
-            </tr>
-            <tr>
-                <td>移库作业</td>
-            </tr>
-        </table>
+        <ul class="main-nav">
+            <router-link class="nav-item" tag="li" :to="{ path: 'warehousing', query: { wd: '入库作业', mode: 1 }}">入库作业</router-link>
+            <router-link class="nav-item" tag="li" :to="{ path: 'warehousing', query: { wd: '出库作业', mode: 2 }}">出库作业</router-link>
+            <router-link class="nav-item" tag="li" :to="{ path: 'warehousing', query: { wd: '补货作业', mode: 3 }}">补货作业</router-link>
+            <router-link class="nav-item" tag="li" :to="{ path: 'warehousing', query: { wd: '移库作业', mode: 4 }}">移库作业</router-link>
+            <router-link class="nav-item" tag="li" :to="{ path: 'warehousing', query: { wd: '流通加工作业', mode: 5 }}">流通加工作业</router-link>
+            <router-link class="nav-item" tag="li" :to="{ path: 'warehousing', query: { wd: '盘点作业', mode: 6 }}">盘点作业</router-link>
+            <router-link class="nav-item" tag="li" :to="{ path: 'warehousing', query: { wd: '移库作业', mode: 7 }}">运输作业</router-link>
+        </ul>
     </div>
      <v-footer>
      </v-footer>
@@ -25,46 +19,49 @@
 
 <script>
 import header from '@/components/header/header'
-import footer from '@/components/footer/footer'
+import footer02 from '@/components/footer/footer02'
 export default {
   name: 'Home',
   components: {
     'v-header': header,
-    'v-footer': footer
+    'v-footer': footer02
   },
   data () {
     return {
 
     }
   },
-  methods: {
-    warehouseing () {
-      this.$router.push({ path: 'warehousing' })
-    }
+  created () {
+    localStorage.removeItem('workingId')
   }
 }
 </script>
 
 <style lang="less" scoped>
+    @rem: 37.5rem;
     .page {
         height: 100%;
         display: flex;
         flex-direction: column;
-        table {
-            border-collapse: collapse;
-            table-layout: fixed;
-            padding: 0 10px;
-        }
-        table, td, th {
-            border: 1px solid black;
-            width: 124px;
-            height: 130px;
-            vertical-align: middle;
-        }
+        background-color: #FAFCFD;
         .main{
             overflow:auto;
             -webkit-overflow-scrolling:touch;
             flex:1;
+            .nav-item {
+                float: left;
+                width: 125 / @rem;
+                height: 100 / @rem;
+                line-height: 100 / @rem;
+                box-sizing: border-box;
+                border-bottom: 1px solid #ddd;
+            }
+            .nav-item {
+                border-right: 1px solid #ddd;
+                &:nth-child(3n+0) {
+                    border-right: none;
+                }
+            }
         }
     }
 </style>

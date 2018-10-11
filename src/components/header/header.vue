@@ -27,6 +27,7 @@ export default {
         overflow: hidden;
         width:100%;
         height: 100px;
+        background: #26a2ff;
     }
     .logo {
         height: 50px;
