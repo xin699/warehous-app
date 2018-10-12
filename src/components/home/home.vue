@@ -9,7 +9,7 @@
             <router-link class="nav-item" tag="li" :to="{ path: 'warehousing', query: { wd: '移库作业', mode: 4 }}">移库作业</router-link>
             <router-link class="nav-item" tag="li" :to="{ path: 'warehousing', query: { wd: '流通加工作业', mode: 5 }}">流通加工作业</router-link>
             <router-link class="nav-item" tag="li" :to="{ path: 'warehousing', query: { wd: '盘点作业', mode: 6 }}">盘点作业</router-link>
-            <router-link class="nav-item" tag="li" :to="{ path: 'warehousing', query: { wd: '移库作业', mode: 7 }}">运输作业</router-link>
+            <router-link class="nav-item" tag="li" :to="{ path: 'warehousing', query: { wd: '运输作业', mode: 7 }}">运输作业</router-link>
         </ul>
     </div>
      <v-footer>

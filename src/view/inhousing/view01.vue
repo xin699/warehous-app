@@ -38,7 +38,7 @@
                     <td>
                         <input type="text" v-model="param3"  placeholder="请填实收数量" class="amout-input"/>
                     </td>
-                    <td>余/{{headList['amount'] - param3 || 0}}</td>
+                    <td>余/{{headList['amount'] - headList['hasAmount'] || 0}}</td>
                 </tr>
                 <tr>
                     <td>建议数量</td>
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import goods from '@/view/goods'
+import goods from './goods'
 import scan from '@/view/scan'
 import { storMaterielInfoForIn, StorMaterielInPlain } from '@/api/comapi'
 var params = Object.assign({}, {id: JSON.parse(localStorage.getItem('workingId'))})
@@ -108,8 +108,6 @@ export default {
     },
     saveResult () { // 保存结果
       const obj = Object.assign({mode: this.$route.query.mode}, this.scanData, params, {param3: this.param3})
-      console.log('保存结果')
-      console.log(obj.params.id)
       StorMaterielInPlain(obj).then(res => {
         if (res.data.code === 200) {
           this.$nextTick(() => {
@@ -126,7 +124,6 @@ export default {
     getHeadList () { // 扫码货品条码后获取顶部信息
       const obj = Object.assign({}, params, {mode: this.$route.query.mode}, {param1: this.scanData['param1']})
       storMaterielInfoForIn(obj).then(res => {
-        console.log(obj.mode)
         if (res.data.code === 200) {
           this.headList = res.data.data
         }

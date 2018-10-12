@@ -50,7 +50,8 @@ export default {
       headList: {}, // 顶部信息
       scanParam: '', // 传递扫码具体索引
       scanData: JSON.parse(localStorage.getItem('result')) || {}, // 获取扫码结果
-      ifSaveBt: false // 保存结果按钮是否显示
+      ifSaveBt: false, // 保存结果按钮是否显示
+      listId: '' // 扫码返回id
     }
   },
   components: {
@@ -86,7 +87,7 @@ export default {
       this.clearSave()
     },
     saveResult () { // 保存结果
-      const obj = Object.assign({mode: this.$route.query.mode}, this.scanData, params)
+      const obj = Object.assign({mode: this.$route.query.mode, id: this.listId}, this.scanData)
       StorMaterielInPlain(obj).then(res => {
         if (res.data.code === 200) {
           this.$nextTick(() => {
@@ -104,6 +105,7 @@ export default {
       storMaterielInfoForIn(obj).then(res => {
         if (res.data.code === 200) {
           this.headList = res.data.data
+          this.listId = res.data.data['id']
         }
       })
     }

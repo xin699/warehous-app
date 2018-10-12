@@ -17,11 +17,11 @@
                 <mt-loadmore :bottom-method="loadBottom" :top-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" @bottom-status-change="handleBottomChange" :auto-fill="autoFill">
                 <table>
                     <tbody>
-                    <tr v-for="(item, index) in goodsList" :key="index" @click="getObj">
+                    <tr v-for="(item, index) in goodsList" :key="index" @click="getObj(index)">
                         <td>{{item['boxNo']}}</td>
                         <td>{{item['barCode']}}</td>
                         <td>{{item['materielName']}}</td>
-                        <td>{{item['amout']}}</td>
+                        <td>{{item['amount']}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -75,6 +75,7 @@ export default {
     },
     getObj (index) {
       this.thatObj = this.goodsList[index] || {}
+      this.$emit('fromChild', this.thatObj)
     },
     loadTop () {
       setTimeout(() => {

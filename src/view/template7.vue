@@ -40,7 +40,7 @@
 
 <script>
 import footer from '@/components/footer/footer'
-import { storPlansList, nowPlainStatus, storPlansProgress, storCheckPlain } from '@/api/comapi'
+import { storPlansList, nowPlainStatus, storPlansProgress, storTransportPlain } from '@/api/comapi'
 import { Loadmore, MessageBox } from 'mint-ui'
 import {
   setToken
@@ -134,11 +134,11 @@ export default {
     },
     go01 (wd, index) {
       if (this.isStart) {
-        if (index + 1 !== 2) {
-          this.$router.push({path: '/warehousing/warehousing06', query: {wd: wd, mode: index + 1}})
+        if (index + 1 !== 3) {
+          this.$router.push({path: '/warehousing/warehousing07', query: {wd: wd, mode: index + 1}})
         } else {
           MessageBox.alert('是否将当前作业单设置为已经完成？').then(action => {
-            storCheckPlain({mode: index + 1, id: this.workingId}).then(res => {
+            storTransportPlain({mode: index + 1, id: this.workingId}).then(res => {
               MessageBox('提示', res.data.msg)
             })
           })

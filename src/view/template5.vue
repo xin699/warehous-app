@@ -135,7 +135,7 @@ export default {
     go01 (wd, index) {
       if (this.isStart) {
         if (index + 1 !== 4) {
-          this.$router.push({path: '/warehousing/warehousing04', query: {wd: wd, mode: index + 1}})
+          this.$router.push({path: '/warehousing/warehousing05', query: {wd: wd, mode: index + 1}})
         } else {
           MessageBox.alert('是否将当前作业单设置为已经完成？').then(action => {
             storMaterielMovePlain({mode: index + 1, id: this.workingId}).then(res => {

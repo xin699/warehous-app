@@ -62,8 +62,7 @@ export default {
       overtext: '已加载完全部',
       isStart: false,
       startBt: '开始',
-      mode: this.$router.history.current['query']['mode'],
-      workingId: JSON.parse(localStorage.getItem('workingId')) // 作业id
+      mode: this.$router.history.current['query']['mode']
     }
   },
   components: {
@@ -130,16 +129,18 @@ export default {
       this.nowStatus = status
     },
     rework () {
-      this.getStorPlansList({ pageNum: this.currentpageNum, pageSize: this.limit })
+      this.getStorPlansList()
     },
     go01 (wd, index) {
       if (this.isStart) {
         if (index + 1 !== 6) {
-          this.$router.push({path: '/warehousing/warehousing01', query: {wd: wd, mode: index + 1}})
+          this.$router.push({path: '/warehousing/warehousing02', query: {wd: wd, mode: index + 1}})
         } else {
+          const workingId = JSON.parse(localStorage.getItem('workingId')) || ''
           MessageBox.alert('是否将当前作业单设置为已经完成？').then(action => {
-            storMaterielOutPlain({mode: index + 1, id: this.workingId}).then(res => {
+            storMaterielOutPlain({mode: index + 1, id: workingId}).then(res => {
               MessageBox('提示', res.data.msg)
+              this.getStorPlansList()
             })
           })
           return false
@@ -147,12 +148,11 @@ export default {
       } else {
         return false
       }
-      // this.$router.push({path: '/warehousing/warehousing02', query: {wd: wd, mode: index + 1}})
     }
   },
   created () {
     // this.getStorPlansProgress({mode: this.$route.query.mode})
-    this.getStorPlansList({ pageNum: this.currentpageNum, pageSize: this.limit })
+    this.getStorPlansList()
   }
 }
 </script>

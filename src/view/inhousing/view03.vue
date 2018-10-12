@@ -26,12 +26,12 @@
                 </tr>
                 <tr>
                     <td>数量</td>
-                    <td colspan="2" class="text-left">{{headList['tuoamount']}}</td>
+                    <td colspan="2" class="text-left">{{headList['amount']}}</td>
                 </tr>
                 <tr>
-                    <td>托盘标签</td>
+                    <td>储位标签</td>
                     <td class="borderN paddingr-0 text-left">
-                        <input type="text" placeholder="请扫描" class="scan-input" disabled v-model.lazy="scanData['param2']">
+                        <input type="text" placeholder="请扫描" class="scan-input" v-model.lazy="scanData['param2']">
                     </td>
                     <td class="borderN" @click="getScan('param2')">
                         <img src="../../assets/scan.png" alt="" class="scan-img">
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import goods from '@/view/goods'
+import goods from './goods'
 import scan from '@/view/scan'
 import { storMaterielInfoForIn, StorMaterielInPlain } from '@/api/comapi'
 var params = Object.assign({}, {id: JSON.parse(localStorage.getItem('workingId')) || ''})
@@ -64,7 +64,8 @@ export default {
       scanParam: '', // 传递扫码具体索引
       scanData: JSON.parse(localStorage.getItem('result')) || {}, // 获取扫码结果
       param3: 0, // 第三个提交参数
-      ifSaveBt: false // 保存结果按钮是否显示
+      ifSaveBt: false, // 保存结果按钮是否显示
+      listId: '' // 扫码返回id
     }
   },
   components: {
@@ -79,7 +80,7 @@ export default {
   watch: {
     param1 (newValue, oldVlue) { // 监控货品条码获取参数
       //   this.param1 = newValue
-      if (newValue && this.isScan) {
+      if (newValue) {
         this.getHeadList()
         this.ifSaveBt = true
       } else {
@@ -100,7 +101,7 @@ export default {
       this.clearSave()
     },
     saveResult () { // 保存结果
-      const obj = Object.assign({mode: this.$route.query.mode}, this.scanData, params)
+      const obj = Object.assign({mode: this.$route.query.mode, id: this.listId}, this.scanData)
       StorMaterielInPlain(obj).then(res => {
         if (res.data.code === 200) {
           this.$nextTick(() => {
@@ -114,10 +115,11 @@ export default {
       })
     },
     getHeadList () { // 扫码货品条码后获取顶部信息
-      const obj = Object.assign({mode: this.$route.query.mode}, {param2: this.scanData['param1']}, params)
+      const obj = Object.assign({mode: this.$route.query.mode}, {param1: this.scanData['param1']}, params)
       storMaterielInfoForIn(obj).then(res => {
         if (res.data.code === 200) {
           this.headList = res.data.data
+          this.listId = res.data.data['id']
         }
       })
     }

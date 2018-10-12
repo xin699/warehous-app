@@ -59,7 +59,8 @@ export default {
       scanParam: '', // 传递扫码具体索引
       scanData: JSON.parse(localStorage.getItem('result')) || {}, // 获取扫码结果
       ifSaveBt: false, // 保存结果按钮是否显示
-      amout: 0
+      amout: 0,
+      listId: '' // 扫码得到的id
     }
   },
   components: {
@@ -94,7 +95,7 @@ export default {
       this.clearSave()
     },
     saveResult () { // 保存结果
-      const obj = Object.assign({mode: this.$route.query.mode}, params, {param1: this.amout})
+      const obj = Object.assign({mode: this.$route.query.mode, id: this.listId}, {param1: this.amout})
       if (this.amout !== 0) {
         storCheckPlain(obj).then(res => {
           this.scanData = {}
@@ -112,6 +113,7 @@ export default {
         console.log(obj.mode)
         if (res.data.code === 200) {
           this.headList = res.data.data
+          this.listId = res.data.data['id']
         }
       })
     }

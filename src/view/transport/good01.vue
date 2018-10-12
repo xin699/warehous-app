@@ -5,11 +5,9 @@
             <table>
                 <thead>
                     <tr>
-                        <th>托盘标签</th>
-                        <th>储位</th>
-                        <th>货品名称</th>
-                        <th>计划数量</th>
-
+                        <th>单据号</th>
+                        <th>车牌号</th>
+                        <th>收货人</th>
                     </tr>
                 </thead>
             </table>
@@ -19,10 +17,9 @@
                 <table>
                     <tbody>
                     <tr v-for="(item, index) in goodsList" :key="index">
-                        <td>{{item['boxNo']}}</td>
-                        <td>{{item['placeNo']}}</td>
-                        <td>{{item['materielName']}}</td>
-                        <td>{{item['amount']}}</td>
+                        <td>{{item['billNo']}}</td>
+                        <td>{{item['vehicleNo']}}</td>
+                        <td>{{item['toCompanyName']}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -36,7 +33,7 @@
 </template>
 
 <script>
-import { storMaterielMove } from '@/api/comapi'
+import { storTransport } from '@/api/comapi'
 import { Loadmore } from 'mint-ui'
 
 export default {
@@ -62,20 +59,20 @@ export default {
   mounted () {
     const elementList = document.querySelectorAll('#header')[0].scrollHeight
     const content = document.querySelectorAll('.content')[0].scrollHeight
-    this.$refs.good.style.height = ((content - elementList - 45) / 37.5) + 'rem'
+    this.$refs.good.style.height = ((content - elementList - 190) / 37.5) + 'rem'
   },
   methods: {
     getList () {
       console.log(this.headerParams)
       const param = Object.assign({}, this.headerParams, { pageNum: this.currentpageNum, pageSize: this.limit })
-      storMaterielMove(param).then(res => {
+      storTransport(param).then(res => {
         this.goodsList = res.data.data
         this.totalNum = res.data.totals
       })
     },
     loadTop () {
       setTimeout(() => {
-        storMaterielMove(this.headerParams).then(res => {
+        storTransport(this.headerParams).then(res => {
           if (res.data.data.length > 0) {
             this.currentpageNum = 1
             this.goodsList = res.data.data
@@ -92,7 +89,7 @@ export default {
         if (this.totalNum - this.currentpageNum * this.limit > 0) {
           this.ifLoadingOver = false
           this.currentpageNum++
-          storMaterielMove(param).then(res => {
+          storTransport(param).then(res => {
             if (res.data.data.length > 0) {
               this.goodsList = this.goodsList.concat(res.data.data)
             } else {
@@ -118,6 +115,10 @@ export default {
 
 <style scoped lang="less">
     @rem: 37.5rem;
+    .list {
+      margin-top: 20/@rem;
+      border-top: 1px solid #ccc;
+    }
     table {
         width: 100%;
         border-collapse: collapse;
@@ -128,11 +129,11 @@ export default {
     }
     .table-header table td {
         vertical-align: middle;
-        padding: 10px 10px;
+        padding: 10/@rem 10/@rem;
         border: 1px solid #ccc;
     }
     .scan-img {
-        width: 24px;
+        width: 24/@rem;
     }
     .paddingr-0 {
         padding-right: 0;

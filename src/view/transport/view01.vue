@@ -4,7 +4,7 @@
          <div class="table-header" id="header">
             <table>
                 <tr>
-                    <td>托盘标签</td>
+                    <td>单据号</td>
                     <td class="borderN paddingr-0 text-left">
                         <input type="text" placeholder="请扫描" v-model.lazy="scanData['param1']" class="scan-input">
                     </td>
@@ -13,16 +13,16 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>储位标签</td>
-                    <td colspan="2" class="text-left">{{headList['placeNo']}}</td>
+                    <td>车牌号</td>
+                    <td colspan="2" class="text-left">{{headList['vehicleNo']}}</td>
                 </tr>
                 <tr>
-                    <td>货品名称</td>
-                    <td colspan="2" class="text-left">{{headList['materielName']}}</td>
+                    <td>收货方</td>
+                    <td colspan="2" class="text-left">{{headList['toCompanyName']}}</td>
                 </tr>
                 <tr>
-                    <td>规格</td>
-                    <td colspan="2" class="text-left">{{headList['standard']}}</td>
+                    <td>放货方</td>
+                    <td colspan="2" class="text-left">{{headList['fromCompanyName']}}</td>
                 </tr>
                 <tr>
                     <td>数量</td>
@@ -30,7 +30,33 @@
                 </tr>
             </table>
             <div class="save-result" v-if="ifSaveBt">
-                <mt-button type="primary" size="small" @click="saveResult">确认下架</mt-button>
+                <mt-button type="primary" size="small" @click="saveResult">确认</mt-button>
+            </div>
+        </div>
+        <h3 class="dital-title">单据明细</h3>
+        <div class="list-dital">
+            <div class="table-head">
+            <table>
+                <thead>
+                    <tr>
+                        <th>货品编码</th>
+                        <th>货品名称</th>
+                        <th>计划数量</th>
+
+                    </tr>
+                </thead>
+            </table>
+            </div>
+            <div class="table-body">
+                <table>
+                    <tbody>
+                    <tr v-for="(item, index) in goodsList" :key="index">
+                        <td>{{item['barCode']}}</td>
+                        <td>{{item['materielName']}}</td>
+                        <td>{{item['amount']}}</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <v-gooods ref="c2" class="goods"></v-gooods>
@@ -44,7 +70,7 @@
 <script>
 import goods from './good01'
 import scan from '@/view/scan'
-import { storMaterielInfoForMove, storMaterielMovePlain } from '@/api/comapi'
+import { storMaterielInfoForTransport, storTransportPlain } from '@/api/comapi'
 var params = Object.assign({}, {id: JSON.parse(localStorage.getItem('workingId')) || ''})
 export default {
   data () {
@@ -53,7 +79,9 @@ export default {
       headList: {}, // 顶部信息
       scanParam: '', // 传递扫码具体索引
       scanData: JSON.parse(localStorage.getItem('result')) || {}, // 获取扫码结果
-      ifSaveBt: false // 保存结果按钮是否显示
+      ifSaveBt: false, // 保存结果按钮是否显示
+      goodsList: [], // 单据明细
+      listId: '' // 扫码得到的id
     }
   },
   components: {
@@ -89,8 +117,7 @@ export default {
       this.clearSave()
     },
     saveResult () { // 保存结果
-      const obj = Object.assign({mode: this.$route.query.mode}, params)
-      storMaterielMovePlain(obj).then(res => {
+      storTransportPlain({mode: this.$route.query.mode, id: this.listId}).then(res => {
         if (res.data.code === 200) {
           this.$nextTick(() => {
             this.$refs.c2.getList()
@@ -104,10 +131,11 @@ export default {
     },
     getHeadList () { // 扫码货品条码后获取顶部信息
       const obj = Object.assign({mode: this.$route.query.mode}, params, {param1: this.scanData['param1']})
-      storMaterielInfoForMove(obj).then(res => {
-        console.log(obj.mode)
+      storMaterielInfoForTransport(obj).then(res => {
         if (res.data.code === 200) {
           this.headList = res.data.data
+          this.goodsList = res.data.data.list
+          this.listId = res.data.data['id']
         }
       })
     }
@@ -130,10 +158,14 @@ export default {
         height: 40px;
         line-height: 40px;
     }
+    .dital-title {
+        text-align: left;
+        padding-left: 20/@rem;
+        font-weight: bold;
+    }
     .table-header {
         padding: 20/@rem;
         box-sizing: border-box;
-        border-bottom: 1px solid #ccc;
     }
     .borderN {
         border: none;
@@ -185,6 +217,11 @@ export default {
         text-align: right;
     }
     .goods {
+        overflow: auto;
+    }
+    .list-dital {
+        border-top: 1px solid #ccc;
+        height: 130/@rem;
         overflow: auto;
     }
 </style>

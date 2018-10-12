@@ -103,6 +103,22 @@ export function storMaterielInfoForCheck (data) {
     params: data
   })
 }
+// 根据扫描信息获取货物信息-运输单用
+export function storMaterielInfoForTransport (data) {
+  return request({
+    url: '/child/m/get/storMaterielInfoForTransport',
+    method: 'get',
+    params: data
+  })
+}
+// 获取已提交运输单列表
+export function storTransport (data) {
+  return request({
+    url: '/child/m/get/storTransport',
+    method: 'get',
+    params: data
+  })
+}
 // 对指定作业单开始作业
 export function nowPlainStatus (data) {
   return request({
@@ -147,6 +163,14 @@ export function storMaterielMovePlain (data) {
 export function storCheckPlain (data) {
   return request({
     url: '/child/m/update/storCheckPlain',
+    method: 'post',
+    params: data
+  })
+}
+// 对运输作业单进行提交
+export function storTransportPlain (data) {
+  return request({
+    url: '/child/m/update/storTransportPlain',
     method: 'post',
     params: data
   })

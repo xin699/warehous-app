@@ -1,6 +1,6 @@
 <template>
  <div>
-     <div class="content" id="header" v-if="!isScan">
+     <div class="content" id="header">
          <div class="table-header">
             <table>
                 <tr>
@@ -21,14 +21,14 @@
                 </tr>
                 <tr>
                     <td class="table-th">区储位</td>
-                    <td colspan="2" class="text-left">{{headList['place_no']}}</td>
+                    <td colspan="2" class="text-left">{{headList['placeNo']}}</td>
                 </tr>
             </table>
             <div class="save-result" v-if="ifSaveBt">
                 <mt-button type="primary" size="small" @click="saveResult">保存结果</mt-button>
             </div>
         </div>
-         <v-gooods ref="c2"></v-gooods>
+         <v-gooods ref="c2" @fromChild="getChildList"></v-gooods>
      </div>
  </div>
 </template>
@@ -40,8 +40,7 @@ export default {
   data () {
     return {
       headList: {}, // 顶部信息
-      ifSaveBt: false, // 保存结果按钮是否显示
-      params: Object.assign({}, {id: JSON.parse(localStorage.getItem('workingId')) || '', mode: this.$route.query.mode})
+      ifSaveBt: false // 保存结果按钮是否显示
     }
   },
   components: {
@@ -49,14 +48,21 @@ export default {
   },
   methods: {
     saveResult () { // 保存结果
-      storMakeUpPlain(this.params).then(res => {
+      storMakeUpPlain({id: this.headList['id'], mode: this.$route.query.mode}).then(res => {
         if (res.data.code === 200) {
-          this.$nextTick(() => {
-            this.headList = this.$refs.c2.thatObj
-          })
           this.ifSaveBt = false
+          this.headList = {}
+          this.$nextTick(() => {
+            this.$refs.c2.getList()
+          })
         }
       })
+    },
+    getChildList (data) { //  获取子元素传递的值
+      this.headList = data
+      if (data['id']) {
+        this.ifSaveBt = true
+      }
     }
   }
 }
