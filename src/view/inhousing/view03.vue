@@ -6,7 +6,7 @@
                 <tr>
                     <td>托盘标签</td>
                     <td class="borderN paddingr-0 text-left">
-                        <input type="text" placeholder="请扫描" class="scan-input" v-model.lazy="scanData['param1']">
+                        <input type="text" placeholder="请扫描" class="scan-input amout-input" v-model.lazy="scanData['param1']">
                     </td>
                     <td class="borderN" @click="getScan('param1')">
                         <img src="../../assets/scan.png" alt="" class="scan-img">
@@ -31,7 +31,7 @@
                 <tr>
                     <td>储位标签</td>
                     <td class="borderN paddingr-0 text-left">
-                        <input type="text" placeholder="请扫描" class="scan-input" v-model.lazy="scanData['param2']">
+                        <input type="text" placeholder="请扫描" class="scan-input amout-input" v-model.lazy="scanData['param2']">
                     </td>
                     <td class="borderN" @click="getScan('param2')">
                         <img src="../../assets/scan.png" alt="" class="scan-img">

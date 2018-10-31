@@ -55,13 +55,13 @@ export default {
     'v-loadmore': Loadmore
   },
   mounted () {
-    const elementList = document.querySelectorAll('#header')[0].scrollHeight
+    const elementList = document.querySelectorAll('.table-header')[0].scrollHeight
     const content = document.querySelectorAll('.content')[0].scrollHeight
-    this.$refs.good.style.height = ((content - elementList - 45) / 37.5) + 'rem'
+    this.$refs.good.style.height = ((content - elementList - 50) / 37.5) + 'rem'
+    // console.log(content - elementList - 65)
   },
   methods: {
     getList () {
-      console.log(this.headerParams)
       const param = Object.assign({}, this.headerParams, { pageNum: this.currentpageNum, pageSize: this.limit })
       storMaterielInOutD(param).then(res => {
         this.goodsList = res.data.data
@@ -69,13 +69,12 @@ export default {
       })
     },
     loadTop () {
+      const param = Object.assign(this.headerParams, { pageNum: this.currentpageNum, pageSize: this.limit })
       setTimeout(() => {
-        storMaterielInOutD(this.headerParams).then(res => {
+        storMaterielInOutD(param).then(res => {
           if (res.data.data.length > 0) {
             this.currentpageNum = 1
             this.goodsList = res.data.data
-            this.ifLoadingOver = false
-            this.allLoaded = false
           }
         })
         this.$refs.loadmore.onTopLoaded()
@@ -106,7 +105,7 @@ export default {
     }
   },
   created () {
-    this.getList()
+    this.getList({ pageNum: this.currentpageNum, pageSize: this.limit })
   }
 }
 </script>
@@ -142,12 +141,16 @@ export default {
         font-weight: bold;
     }
     .table-body {
+      // height: 385/@rem;
       overflow: auto;
+      box-sizing:border-box;
+    -webkit-overflow-scrolling: touch;
     }
     .table-body table {
         table-layout: fixed;
     }
     .table-body table td {
         padding: 5/@rem;
+        word-wrap: break-word
     }
 </style>

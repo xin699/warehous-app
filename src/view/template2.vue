@@ -5,7 +5,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>单据号</th>
+                        <th>单据号1</th>
                         <th>操作类型</th>
                         <th>操作状态</th>
                     </tr>
@@ -30,7 +30,7 @@
             </div>
      </div>
      <div class="precess">
-         <div v-for="(item, index) in precessList" :key="index" :class="{precess_item: true, started_item: !item.doStatus&&isStart}" @click="go01(item.name, index)">
+         <div v-for="(item, index) in precessList" :key="index" :class="{precess_item: true, started_item: !item.doStatus&&isStart}" @click="go01(item.name, item.mode)">
              {{ item.name }}
         </div>
      </div>
@@ -131,16 +131,17 @@ export default {
     rework () {
       this.getStorPlansList()
     },
-    go01 (wd, index) {
+    go01 (wd, mode) {
       if (this.isStart) {
-        if (index + 1 !== 6) {
-          this.$router.push({path: '/warehousing/warehousing02', query: {wd: wd, mode: index + 1}})
+        if (wd !== '出库完成') {
+          this.$router.push({path: '/warehousing/warehousing02', query: {wd: wd, mode: mode}})
         } else {
-          const workingId = JSON.parse(localStorage.getItem('workingId')) || ''
+          // const workingId = JSON.parse(localStorage.getItem('workingId')) || ''
           MessageBox.alert('是否将当前作业单设置为已经完成？').then(action => {
-            storMaterielOutPlain({mode: index + 1, id: workingId}).then(res => {
+            storMaterielOutPlain({mode: mode, id: JSON.parse(localStorage.getItem('workingId')) || ''}).then(res => {
               MessageBox('提示', res.data.msg)
               this.getStorPlansList()
+              this.getStorPlansProgress({mode: this.mode})
             })
           })
           return false
@@ -176,7 +177,7 @@ export default {
     }
     .table-body {
         overflow: auto;
-        height: 230/@rem;
+        height: 253/@rem;
     }
     table {
         width: 100%;
@@ -202,7 +203,7 @@ export default {
     }
     .precess {
         padding: 0 40/@rem 40/@rem 40/@rem;
-        height: 225/@rem;
+        height: 308/@rem;
         overflow: auto;
         box-sizing: border-box;
     }

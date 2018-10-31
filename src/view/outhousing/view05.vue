@@ -17,7 +17,7 @@
                 </tr>
                 <tr>
                     <td class="table-th">当前数量</td>
-                    <td colspan="2" class="text-left">{{headList['amount']}}</td>
+                    <td colspan="2" class="text-left">{{headList['plainAmount']}}</td>
                 </tr>
             </table>
             <div class="save-result" v-if="ifSaveBt">

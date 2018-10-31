@@ -28,6 +28,7 @@ export default {
       this.$store.dispatch('LogOut').then(res => {
         Indicator.close()
         this.$router.push('/login')
+        localStorage.removeItem('accessToken')
       }).catch(() => {
         Indicator.close()
       })

@@ -62,7 +62,7 @@ export default {
   mounted () {
     const elementList = document.querySelectorAll('#header')[0].scrollHeight
     const content = document.querySelectorAll('.content')[0].scrollHeight
-    this.$refs.good.style.height = ((content - elementList - 45) / 37.5) + 'rem'
+    this.$refs.good.style.height = ((content - elementList - 80) / 37.5) + 'rem'
   },
   methods: {
     getList () {
@@ -124,6 +124,7 @@ export default {
         padding: 0 10px;
     }
     table th {
+        width: 25%;
         font-weight: 600;
     }
     .table-header table td {
@@ -144,6 +145,7 @@ export default {
         margin: 10/@rem 0 5/@rem 0;
     }
     .table-head table th {
+        width: 25%;
         font-weight: bold;
     }
     .table-body {
@@ -154,5 +156,6 @@ export default {
     }
     .table-body table td {
         padding: 5/@rem;
+        word-wrap: break-word
     }
 </style>

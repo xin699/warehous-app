@@ -175,3 +175,11 @@ export function storTransportPlain (data) {
     params: data
   })
 }
+// 盘点底部查询
+export function storCheckD (data) {
+  return request({
+    url: '/child/m/get/storCheckD',
+    method: 'get',
+    params: data
+  })
+}

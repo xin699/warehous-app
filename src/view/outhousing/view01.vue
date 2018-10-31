@@ -6,7 +6,7 @@
                 <tr>
                     <td>托盘标签</td>
                     <td class="borderN paddingr-0 text-left">
-                        <input type="text" placeholder="请扫描" v-model.lazy="scanData['param1']" class="scan-input">
+                        <input type="text" placeholder="请扫描" v-model.lazy="scanData['param1']" class="scan-input amout-input">
                     </td>
                     <td class="borderN" @click="getScan('param1')">
                         <img src="../../assets/scan.png" alt="" class="scan-img">
@@ -26,7 +26,7 @@
                 </tr>
                 <tr>
                     <td>数量</td>
-                    <td colspan="2" class="text-left">{{headList['amount']}}</td>
+                    <td colspan="2" class="text-left">{{headList['plainAmount']}}<span class="amoumt">(总数量：{{ headList['amount'] }})</span></td>
                 </tr>
             </table>
             <div class="save-result" v-if="ifSaveBt">
@@ -105,7 +105,6 @@ export default {
     getHeadList () { // 扫码货品条码后获取顶部信息
       const obj = Object.assign({mode: this.$route.query.mode}, params, {param1: this.scanData['param1']})
       storMaterielInfoForOut(obj).then(res => {
-        console.log(obj.mode)
         if (res.data.code === 200) {
           this.headList = res.data.data
           this.listId = res.data.data['id']
@@ -187,5 +186,8 @@ export default {
     }
     .goods {
         overflow: auto;
+    }
+    .amoumt {
+        padding-left: 20/@rem;
     }
 </style>

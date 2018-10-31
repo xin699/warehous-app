@@ -1,7 +1,7 @@
 <template>
  <div class="page">
-     <v-header></v-header>
-    <div class="main">
+     <v-header v-if="!isScan"></v-header>
+    <div class="main" v-if="!isScan">
       <div class="login__form">
         <div class="login__row">
           <svg class="login__icon name svg-icon" viewBox="0 0 20 20">
@@ -18,27 +18,62 @@
         <mt-button type="primary" class="login__submit" @click.native.prevent="login">Sign in</mt-button>
         <div class="scan">
           <!-- <span>扫码登录</span> -->
-          <img src="../../assets/scan.png" alt="" @click="scan">
+          <img src="../../assets/scan.png" alt="" @click="getScan('param1')">
           <mt-button type="default" size="small" class="reset" @click.native.prevent="reset">重置</mt-button>
         </div>
       </div>
+    </div>
+    <div v-else>
+        <v-scan @childScan="closeScan" :scanParam="scanParam"></v-scan>
     </div>
  </div>
 </template>
 
 <script>
 import header from '@/components/header/header'
+import scan from '@/view/scan'
 import { Indicator } from 'mint-ui'
 export default {
   name: 'Home',
   components: {
-    'v-header': header
+    'v-header': header,
+    'v-scan': scan
   },
   data () {
     return {
       user: {
         username: '',
         password: ''
+      },
+      scanParam: '', // 传递扫码具体索引
+      scanData: JSON.parse(localStorage.getItem('result')) || {}, // 获取扫码结果
+      isScan: false // 扫码控件显示
+    }
+  },
+  computed: {
+    param1 () { // 中间件处理监控对象具体属性
+      return this.scanData['param1']
+    }
+  },
+  watch: {
+    param1 (newValue, oldVlue) { // 监控货品条码获取参数
+      if (newValue) {
+        const obj = this.scanData['param1']
+        localStorage.setItem('accessToken', JSON.stringify(obj.split('+')[0]))
+        if (JSON.parse(localStorage.getItem('accessToken'))) {
+          if (obj.split('+')[1] && obj.split('+')[2]) {
+            localStorage.setItem('taskId', JSON.stringify(obj.split('+')[1]))
+            localStorage.setItem('companyId', JSON.stringify(obj.split('+')[2]))
+            this.$router.push({path: '/home'})
+          } else if (obj.split('+')[1] && !obj.split('+')[2]) {
+            localStorage.setItem('taskId', JSON.stringify(obj.split('+')[1]))
+            this.$router.push({path: '/company'})
+          } else {
+            this.$router.push({path: '/'})
+          }
+        }
+      } else {
+        return false
       }
     }
   },
@@ -56,9 +91,13 @@ export default {
       this.user.username = ''
       this.user.password = ''
     },
-    scan () {
-      alert('scan')
-      this.$router.push('/scan')
+    closeScan () {
+      this.isScan = false
+      this.scanData = JSON.parse(localStorage.getItem('result')) || {}
+    },
+    getScan (param) {
+      this.scanParam = param
+      this.isScan = true
     }
   }
 }

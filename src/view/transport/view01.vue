@@ -6,7 +6,7 @@
                 <tr>
                     <td>单据号</td>
                     <td class="borderN paddingr-0 text-left">
-                        <input type="text" placeholder="请扫描" v-model.lazy="scanData['param1']" class="scan-input">
+                        <input type="text" placeholder="请扫描" v-model.lazy="scanData['param1']" class="scan-input amout-input">
                     </td>
                     <td class="borderN" @click="getScan('param1')">
                         <img src="../../assets/scan.png" alt="" class="scan-img">

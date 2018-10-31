@@ -12,27 +12,42 @@
             <router-link class="nav-item" tag="li" :to="{ path: 'warehousing', query: { wd: '运输作业', mode: 7 }}">运输作业</router-link>
         </ul>
     </div>
-     <v-footer>
-     </v-footer>
+     <div class="footer">
+     <ul>
+         <li @click="goback">
+             返回上级
+         </li>
+         <li @click="backmenu">
+             回到主菜单
+         </li>
+         <li>
+             联系我们
+         </li>
+     </ul>
+ </div>
  </div>
 </template>
 
 <script>
 import header from '@/components/header/header'
-import footer02 from '@/components/footer/footer02'
 export default {
   name: 'Home',
   components: {
-    'v-header': header,
-    'v-footer': footer02
+    'v-header': header
   },
   data () {
     return {
 
     }
   },
+  methods: {
+    goback () {
+      this.$router.push({path: '/company'})
+    }
+  },
   created () {
     localStorage.removeItem('workingId')
+    localStorage.removeItem('result')
   }
 }
 </script>
@@ -62,6 +77,25 @@ export default {
                     border-right: none;
                 }
             }
+        }
+        .footer{
+        overflow:hidden;
+        ul {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            border: 1px solid #ccc;
+            li {
+                height: 45px;
+                line-height: 45px;
+                flex: 1;
+            }
+            li:nth-child(2) {
+                border-left: 1px solid #ccc;
+                border-right: 1px solid #ccc;
+            }
+        }
         }
     }
 </style>

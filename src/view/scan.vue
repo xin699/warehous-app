@@ -26,7 +26,6 @@ document.addEventListener('plusready', function () {
     scan.cancel()// 关闭扫描
     scan.close()// 关闭条码识别控件
     window.history.back()
-    console.log(123)
   }, false)
 })
 export default{
@@ -59,7 +58,8 @@ export default{
       let that = this
       if (!window.plus) return
       // 创建条码扫描识别控件
-      scan = new plus.barcode.Barcode('bcid') // eslint-disable-line no-undef
+      scan = new plus.barcode.Barcode('bcid', [plus.barcode.QR, plus.barcode.CODE128], {frameColor: '#00FF00', scanbarColor: '#00FF00'}) // eslint-disable-line no-undef
+      // scan = new plus.barcode.Barcode('bcid')
       // 条码识别成功
       scan.onmarked = onmarked
       function onmarked (type, result, file) {

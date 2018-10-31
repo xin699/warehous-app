@@ -60,6 +60,7 @@ export default {
     const elementList = document.querySelectorAll('#header')[0].scrollHeight
     const content = document.querySelectorAll('.content')[0].scrollHeight
     this.$refs.good.style.height = ((content - elementList - 190) / 37.5) + 'rem'
+    console.log(content - elementList - 248)
   },
   methods: {
     getList () {
@@ -145,6 +146,7 @@ export default {
         margin: 10/@rem 0 5/@rem 0;
     }
     .table-head table th {
+        width: 33.3333333333%;
         font-weight: bold;
     }
     .table-body {
@@ -155,5 +157,6 @@ export default {
     }
     .table-body table td {
         padding: 5/@rem;
+        word-wrap: break-word
     }
 </style>

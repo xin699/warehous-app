@@ -24,9 +24,9 @@
                     </tbody>
                 </table>
                 </mt-loadmore>
-                <div class="over-loading" v-if="ifLoadingOver">
+                <!-- <div class="over-loading" v-if="ifLoadingOver">
                   <span>{{overtext}}</span>
-                </div>
+                </div> -->
             </div>
      </div>
  </div>
@@ -44,7 +44,7 @@ export default {
       allLoaded: false,
       autoFill: false, // 若为真，loadmore 会自动检测并撑满其容器
       currentpageNum: 1, // 当前页数
-      limit: 10, // 每页条数
+      limit: 20, // 每页条数
       totalNum: null, // 总数
       nowStatus: '',
       bottomPullText: '上拉加载更多...',
@@ -59,7 +59,7 @@ export default {
   mounted () {
     const elementList = document.querySelectorAll('#header')[0].scrollHeight
     const content = document.querySelectorAll('.content')[0].scrollHeight
-    this.$refs.good.style.height = ((content - elementList - 45) / 37.5) + 'rem'
+    this.$refs.good.style.height = ((content - elementList - 50) / 37.5) + 'rem'
   },
   methods: {
     getList () {
@@ -70,13 +70,12 @@ export default {
       })
     },
     loadTop () {
+      const param = Object.assign({}, this.headerParams, { pageNum: this.currentpageNum, pageSize: this.limit })
       setTimeout(() => {
-        storMaterielInOutD(this.headerParams).then(res => {
+        storMaterielInOutD(param).then(res => {
           if (res.data.data.length > 0) {
             this.currentpageNum = 1
             this.goodsList = res.data.data
-            this.ifLoadingOver = false
-            this.allLoaded = false
           }
         })
         this.$refs.loadmore.onTopLoaded()
@@ -143,12 +142,16 @@ export default {
         font-weight: bold;
     }
     .table-body {
-      overflow: auto;
+      // height: 285/@rem;
+      overflow: scroll;
+      box-sizing:border-box;
+    -webkit-overflow-scrolling: touch;
     }
     .table-body table {
         table-layout: fixed;
     }
     .table-body table td {
         padding: 5/@rem;
+        word-wrap: break-word
     }
 </style>

@@ -6,7 +6,7 @@
                 <tr>
                     <td>储位标签</td>
                     <td class="borderN paddingr-0 text-left">
-                        <input type="text" placeholder="请扫描" v-model.lazy="scanData['param1']" class="scan-input">
+                        <input type="text" placeholder="请扫描" v-model.lazy="scanData['param1']" class="scan-input amout-input">
                     </td>
                     <td class="borderN" @click="getScan('param1')">
                         <img src="../../assets/scan.png" alt="" class="scan-img">
@@ -20,10 +20,10 @@
                     <td>货品名称</td>
                     <td colspan="2" class="text-left">{{headList['materielName']}}</td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td>批号</td>
                     <td colspan="2" class="text-left">{{headList['grouporder']}}</td>
-                </tr>
+                </tr> -->
                 <tr>
                     <td>包装单位</td>
                     <td colspan="2" class="text-left">{{headList['standard']}}</td>
@@ -31,7 +31,7 @@
                 <tr>
                     <td>数量</td>
                     <td colspan="2" class="text-left">
-                        <input type="text" placeholder="请填写数量" v-model.lazy="amout" class="scan-input">
+                        <input type="text" placeholder="请填写数量" v-model.lazy="amout" class="scan-input amout-input">
                     </td>
                 </tr>
             </table>
@@ -39,6 +39,7 @@
                 <mt-button type="primary" size="small" @click="saveResult">保存</mt-button>
             </div>
         </div>
+        <v-gooods ref="c2" class="goods"></v-gooods>
      </div>
     <div v-else>
         <v-scan @childScan="closeScan" :scanParam="scanParam"></v-scan>
@@ -48,6 +49,7 @@
 
 <script>
 import scan from '@/view/scan'
+import goods from './good01'
 import { storMaterielInfoForCheck, storCheckPlain } from '@/api/comapi'
 import { MessageBox } from 'mint-ui'
 var params = Object.assign({}, {id: JSON.parse(localStorage.getItem('workingId')) || ''})
@@ -59,11 +61,12 @@ export default {
       scanParam: '', // 传递扫码具体索引
       scanData: JSON.parse(localStorage.getItem('result')) || {}, // 获取扫码结果
       ifSaveBt: false, // 保存结果按钮是否显示
-      amout: 0,
+      amout: '',
       listId: '' // 扫码得到的id
     }
   },
   components: {
+    'v-gooods': goods,
     'v-scan': scan
   },
   computed: {
@@ -139,7 +142,7 @@ export default {
     .table-header {
         padding: 20/@rem;
         box-sizing: border-box;
-        // border-bottom: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
     }
     .borderN {
         border: none;

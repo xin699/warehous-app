@@ -13,21 +13,30 @@
               <span>{{overtext}}</span>
           </div>
     </div>
-    <v-footer>
-     </v-footer>
+    <div class="footer">
+     <ul>
+         <li @click="goback">
+             返回上级
+         </li>
+         <li @click="backmenu">
+             回到主菜单
+         </li>
+         <li>
+             联系我们
+         </li>
+     </ul>
+ </div>
  </div>
 </template>
 
 <script>
 import header from '@/components/header/header'
-import footer02 from '@/components/footer/footer02'
 import { companyQuery } from '@/api/comapi'
 import { Loadmore } from 'mint-ui'
 export default {
   name: 'Home',
   components: {
     'v-header': header,
-    'v-footer': footer02,
     'v-loadmore': Loadmore
   },
   data () {
@@ -46,6 +55,12 @@ export default {
     }
   },
   methods: {
+    goback () {
+      this.$router.push({path: '/'})
+    },
+    backmenu () {
+      this.$router.push({path: '/home'})
+    },
     getTask (obj) {
       companyQuery(obj).then(res => {
         this.companyList = res.data.data
@@ -128,5 +143,24 @@ export default {
               margin-top: 10px;
             }
         }
+        .footer{
+        overflow:hidden;
+        ul {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            border: 1px solid #ccc;
+            li {
+                height: 45px;
+                line-height: 45px;
+                flex: 1;
+            }
+            li:nth-child(2) {
+                border-left: 1px solid #ccc;
+                border-right: 1px solid #ccc;
+            }
+        }
+    }
     }
 </style>

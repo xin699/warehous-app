@@ -1,12 +1,16 @@
 <template>
  <div>
-     <div class="content" id="header" v-if="!isScan">
-         <div class="table-header">
+     <div class="content" v-if="!isScan">
+         <div class="table-header" id="header">
             <table>
                 <tr>
-                    <td>托盘标签</td>
+                    <td>货品条码</td>
+                    <td colspan="2" class="text-left">{{headList['barCode']}}</td>
+                </tr>
+                <tr>
+                    <td>储位标签</td>
                     <td class="borderN paddingr-0 text-left">
-                        <input type="text" placeholder="请扫描" class="scan-input amout-input" v-model.lazy="scanData['param1']">
+                        <input type="text" placeholder="请扫描" v-model.lazy="scanData['param1']" class="scan-input amout-input">
                     </td>
                     <td class="borderN" @click="getScan('param1')">
                         <img src="../../assets/scan.png" alt="" class="scan-img">
@@ -17,19 +21,23 @@
                     <td colspan="2" class="text-left">{{headList['materielName']}}</td>
                 </tr>
                 <tr>
+                    <td>规格</td>
+                    <td colspan="2" class="text-left">{{headList['standard']}}</td>
+                </tr>
+                <tr>
+                    <td>包装单位</td>
+                    <td colspan="2" class="text-left">{{headList['unit']}}</td>
+                </tr>
+                <tr>
                     <td>数量</td>
                     <td colspan="2" class="text-left">{{headList['amount']}}</td>
                 </tr>
-                <tr>
-                    <td>到达地点</td>
-                    <td colspan="2" class="text-left">托盘货架理货区</td>
-                </tr>
             </table>
             <div class="save-result" v-if="ifSaveBt">
-                <mt-button type="primary" size="small" @click="saveResult">确认搬运</mt-button>
+                <mt-button type="primary" size="small" @click="saveResult">确认下架</mt-button>
             </div>
         </div>
-         <v-gooods ref="c2"></v-gooods>
+        <v-gooods ref="c2" class="goods"></v-gooods>
      </div>
     <div v-else>
         <v-scan @childScan="closeScan" :scanParam="scanParam"></v-scan>
@@ -38,20 +46,19 @@
 </template>
 
 <script>
-import goods from './good02'
+import goods from './good01'
 import scan from '@/view/scan'
-import { storMaterielInfoForMakeUp, storMakeUpPlain } from '@/api/comapi'
+import { storMaterielInfoForOut, storMaterielOutPlain } from '@/api/comapi'
 var params = Object.assign({}, {id: JSON.parse(localStorage.getItem('workingId')) || ''})
 export default {
   data () {
     return {
-      barCode: '',
       isScan: false, // 扫码控件显示
       headList: {}, // 顶部信息
       scanParam: '', // 传递扫码具体索引
       scanData: JSON.parse(localStorage.getItem('result')) || {}, // 获取扫码结果
       ifSaveBt: false, // 保存结果按钮是否显示
-      listId: '' // 扫码得到的id
+      listId: '' // 扫码返回id
     }
   },
   components: {
@@ -87,7 +94,7 @@ export default {
       this.clearSave()
     },
     saveResult () { // 保存结果
-      storMakeUpPlain({mode: this.$route.query.mode, id: this.listId}).then(res => {
+      storMaterielOutPlain({mode: this.$route.query.mode, id: this.listId}).then(res => {
         if (res.data.code === 200) {
           this.$nextTick(() => {
             this.$refs.c2.getList()
@@ -100,8 +107,8 @@ export default {
       })
     },
     getHeadList () { // 扫码货品条码后获取顶部信息
-      const obj = Object.assign({mode: this.$route.query.mode}, {param1: this.scanData['param1']}, params)
-      storMaterielInfoForMakeUp(obj).then(res => {
+      const obj = Object.assign({mode: this.$route.query.mode}, params, {param1: this.scanData['param1']})
+      storMaterielInfoForOut(obj).then(res => {
         if (res.data.code === 200) {
           this.headList = res.data.data
           this.listId = res.data.data['id']
@@ -113,6 +120,7 @@ export default {
     localStorage.removeItem('result') // 离开组件时清楚扫码所得信息
     this.isScan = false
     this.scanData = {}
+    this.param3 = 0
   }
 }
 </script>
@@ -179,5 +187,8 @@ export default {
     .save-result {
         margin-top: 10/@rem;
         text-align: right;
+    }
+    .goods {
+        overflow: auto;
     }
 </style>

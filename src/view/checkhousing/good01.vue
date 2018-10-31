@@ -5,10 +5,9 @@
             <table>
                 <thead>
                     <tr>
-                        <th>托盘标签</th>
-                        <th>货品标签</th>
+                        <th>货品条码</th>
                         <th>货品名称</th>
-                        <th>计划数量</th>
+                        <th>储位标签</th>
                     </tr>
                 </thead>
             </table>
@@ -17,11 +16,10 @@
                 <mt-loadmore :bottom-method="loadBottom" :top-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" @bottom-status-change="handleBottomChange" :auto-fill="autoFill">
                 <table>
                     <tbody>
-                    <tr v-for="(item, index) in goodsList" :key="index" @click="getObj(index)">
-                        <td>{{item['boxNo']}}</td>
+                    <tr v-for="(item, index) in goodsList" :key="index">
                         <td>{{item['barCode']}}</td>
                         <td>{{item['materielName']}}</td>
-                        <td>{{item['amount']}}</td>
+                        <td>{{item['placeNo']}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -35,7 +33,7 @@
 </template>
 
 <script>
-import { storMakeUpD } from '@/api/comapi'
+import { storCheckD } from '@/api/comapi'
 import { Loadmore } from 'mint-ui'
 
 export default {
@@ -52,8 +50,7 @@ export default {
       bottomPullText: '上拉加载更多...',
       bottomDropText: '释放更新...',
       ifLoadingOver: false,
-      overtext: '已加载完全部',
-      thatObj: {}
+      overtext: '已加载完全部'
     }
   },
   components: {
@@ -68,18 +65,14 @@ export default {
     getList () {
       console.log(this.headerParams)
       const param = Object.assign({}, this.headerParams, { pageNum: this.currentpageNum, pageSize: this.limit })
-      storMakeUpD(param).then(res => {
+      storCheckD(param).then(res => {
         this.goodsList = res.data.data
         this.totalNum = res.data.totals
       })
     },
-    getObj (index) {
-      this.thatObj = this.goodsList[index] || {}
-      this.$emit('fromChild', this.thatObj)
-    },
     loadTop () {
       setTimeout(() => {
-        storMakeUpD(this.headerParams).then(res => {
+        storCheckD(this.headerParams).then(res => {
           if (res.data.data.length > 0) {
             this.currentpageNum = 1
             this.goodsList = res.data.data
@@ -96,7 +89,7 @@ export default {
         if (this.totalNum - this.currentpageNum * this.limit > 0) {
           this.ifLoadingOver = false
           this.currentpageNum++
-          storMakeUpD(param).then(res => {
+          storCheckD(param).then(res => {
             if (res.data.data.length > 0) {
               this.goodsList = this.goodsList.concat(res.data.data)
             } else {
@@ -148,7 +141,7 @@ export default {
         margin: 10/@rem 0 5/@rem 0;
     }
     .table-head table th {
-        width: 25%;
+        width: 33.33333333%;
         font-weight: bold;
     }
     .table-body {

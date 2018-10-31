@@ -57,4 +57,7 @@ export default {
         height: 40px;
         line-height: 40px;
     }
+    .amout-input {
+        border: 1px solid #CCC
+    }
 </style>
