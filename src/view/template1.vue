@@ -13,7 +13,7 @@
             </table>
             </div>
             <div class="table-body">
-            <mt-loadmore :bottom-method="loadBottom" :top-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" @bottom-status-change="handleBottomChange" :auto-fill="autoFill">
+            <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" @bottom-status-change="handleBottomChange" :auto-fill="autoFill">
                 <table>
                     <tbody>
                     <tr v-for="(item, index) in workList" :key="index">
@@ -97,17 +97,17 @@ export default {
         localStorage.setItem('workingId', JSON.stringify(doStatus['id']))
       })
     },
-    loadTop () {
-      setTimeout(() => {
-        storPlansList({mode: this.$route.query.mode}).then(res => {
-          if (res.data.data.length > 0) {
-            this.currentpageNum = 1
-            this.workList = res.data.data
-          }
-        })
-        this.$refs.loadmore.onTopLoaded()
-      }, 1500)
-    },
+    // loadTop () {
+    //   setTimeout(() => {
+    //     storPlansList({mode: this.$route.query.mode}).then(res => {
+    //       if (res.data.data.length > 0) {
+    //         this.currentpageNum = 1
+    //         this.workList = res.data.data
+    //       }
+    //     })
+    //     this.$refs.loadmore.onTopLoaded()
+    //   }, 1500)
+    // },
     loadBottom () {
       setTimeout(() => {
         if (this.totalNum - this.currentpageNum * this.limit > 0) {

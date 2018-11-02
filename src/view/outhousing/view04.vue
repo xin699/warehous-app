@@ -78,6 +78,9 @@ export default {
       if (newValue) {
         this.getHeadList()
         this.ifSaveBt = true
+        this.$nextTick(() => {
+          this.$refs.c2.getconH()
+        })
       } else {
         return false
       }

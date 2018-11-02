@@ -80,6 +80,9 @@ export default {
       if (newValue) {
         this.getHeadList()
         this.ifSaveBt = true
+        this.$nextTick(() => {
+          this.$refs.c2.getconH()
+        })
       } else {
         return false
       }
@@ -113,7 +116,6 @@ export default {
     getHeadList () { // 扫码货品条码后获取顶部信息
       const obj = Object.assign({mode: this.$route.query.mode, param1: this.scanData['param1']}, params)
       storMaterielInfoForCheck(obj).then(res => {
-        console.log(obj.mode)
         if (res.data.code === 200) {
           this.headList = res.data.data
           this.listId = res.data.data['id']

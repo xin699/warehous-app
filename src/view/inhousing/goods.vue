@@ -13,7 +13,7 @@
             </table>
             </div>
             <div class="table-body" id="goods" ref="good">
-                <mt-loadmore :bottom-method="loadBottom" :top-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" @bottom-status-change="handleBottomChange" :auto-fill="autoFill">
+                <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" @bottom-status-change="handleBottomChange" :auto-fill="autoFill">
                 <table>
                     <tbody>
                     <tr v-for="(item, index) in goodsList" :key="index">
@@ -24,9 +24,9 @@
                     </tbody>
                 </table>
                 </mt-loadmore>
-                <!-- <div class="over-loading" v-if="ifLoadingOver">
+                <div class="over-loading" v-if="ifLoadingOver">
                   <span>{{overtext}}</span>
-                </div> -->
+                </div>
             </div>
      </div>
  </div>
@@ -42,7 +42,7 @@ export default {
       headerParams: Object.assign({}, {id: JSON.parse(localStorage.getItem('workingId')) || '', mode: JSON.parse(localStorage.getItem('mode')) || ''}), // 作业id， mode号
       goodsList: [],
       allLoaded: false,
-      autoFill: false, // 若为真，loadmore 会自动检测并撑满其容器
+      autoFill: true, // 若为真，loadmore 会自动检测并撑满其容器
       currentpageNum: 1, // 当前页数
       limit: 20, // 每页条数
       totalNum: null, // 总数
@@ -57,9 +57,7 @@ export default {
     'v-loadmore': Loadmore
   },
   mounted () {
-    const elementList = document.querySelectorAll('#header')[0].scrollHeight
-    const content = document.querySelectorAll('.content')[0].scrollHeight
-    this.$refs.good.style.height = ((content - elementList - 50) / 37.5) + 'rem'
+    this.getconH()
   },
   methods: {
     getList () {
@@ -69,18 +67,24 @@ export default {
         this.totalNum = res.data.totals
       })
     },
-    loadTop () {
-      const param = Object.assign({}, this.headerParams, { pageNum: this.currentpageNum, pageSize: this.limit })
-      setTimeout(() => {
-        storMaterielInOutD(param).then(res => {
-          if (res.data.data.length > 0) {
-            this.currentpageNum = 1
-            this.goodsList = res.data.data
-          }
-        })
-        this.$refs.loadmore.onTopLoaded()
-      }, 1500)
+    getconH () {
+      const elementList = document.querySelectorAll('#header')[0].scrollHeight
+      const content = document.querySelectorAll('.content')[0].scrollHeight
+      this.$refs.good.style.height = ((content - elementList - 50) / 37.5) + 'rem'
+      console.log((content - elementList - 50) / 37.5)
     },
+    // loadTop () {
+    //   const param = Object.assign({}, this.headerParams, { pageNum: this.currentpageNum, pageSize: this.limit })
+    //   setTimeout(() => {
+    //     storMaterielInOutD(param).then(res => {
+    //       if (res.data.data.length > 0) {
+    //         this.currentpageNum = 1
+    //         this.goodsList = res.data.data
+    //       }
+    //     })
+    //     this.$refs.loadmore.onTopLoaded()
+    //   }, 1500)
+    // },
     loadBottom () {
       setTimeout(() => {
         if (this.totalNum - this.currentpageNum * this.limit > 0) {
@@ -143,7 +147,7 @@ export default {
     }
     .table-body {
       // height: 285/@rem;
-      overflow: scroll;
+      overflow: auto;
       box-sizing:border-box;
     -webkit-overflow-scrolling: touch;
     }

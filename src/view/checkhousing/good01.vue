@@ -13,7 +13,7 @@
             </table>
             </div>
             <div class="table-body" id="goods" ref="good">
-                <mt-loadmore :bottom-method="loadBottom" :top-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" @bottom-status-change="handleBottomChange" :auto-fill="autoFill">
+                <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" @bottom-status-change="handleBottomChange" :auto-fill="autoFill">
                 <table>
                     <tbody>
                     <tr v-for="(item, index) in goodsList" :key="index">
@@ -57,9 +57,7 @@ export default {
     'v-loadmore': Loadmore
   },
   mounted () {
-    const elementList = document.querySelectorAll('#header')[0].scrollHeight
-    const content = document.querySelectorAll('.content')[0].scrollHeight
-    this.$refs.good.style.height = ((content - elementList - 80) / 37.5) + 'rem'
+    this.getconH()
   },
   methods: {
     getList () {
@@ -70,19 +68,24 @@ export default {
         this.totalNum = res.data.totals
       })
     },
-    loadTop () {
-      setTimeout(() => {
-        storCheckD(this.headerParams).then(res => {
-          if (res.data.data.length > 0) {
-            this.currentpageNum = 1
-            this.goodsList = res.data.data
-            this.ifLoadingOver = false
-            this.allLoaded = false
-          }
-        })
-        this.$refs.loadmore.onTopLoaded()
-      }, 1500)
+    getconH () {
+      const elementList = document.querySelectorAll('#header')[0].scrollHeight
+      const content = document.querySelectorAll('.content')[0].scrollHeight
+      this.$refs.good.style.height = ((content - elementList - 50) / 37.5) + 'rem'
     },
+    // loadTop () {
+    //   setTimeout(() => {
+    //     storCheckD(this.headerParams).then(res => {
+    //       if (res.data.data.length > 0) {
+    //         this.currentpageNum = 1
+    //         this.goodsList = res.data.data
+    //         this.ifLoadingOver = false
+    //         this.allLoaded = false
+    //       }
+    //     })
+    //     this.$refs.loadmore.onTopLoaded()
+    //   }, 1500)
+    // },
     loadBottom () {
       const param = Object.assign(this.headerParams, { pageNum: this.currentpageNum, pageSize: this.limit })
       setTimeout(() => {
