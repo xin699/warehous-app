@@ -1,7 +1,7 @@
 <template>
  <div>
-     <div class="content" id="header" v-if="!isScan">
-         <div class="table-header">
+     <div class="content" v-if="!isScan">
+         <div class="table-header" id="header">
             <table>
                 <tr>
                     <td>托盘标签</td>

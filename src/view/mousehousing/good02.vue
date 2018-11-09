@@ -59,7 +59,6 @@ export default {
   },
   methods: {
     getList () {
-      console.log(this.headerParams)
       const param = Object.assign({}, this.headerParams, { pageNum: this.currentpageNum, pageSize: this.limit })
       storMaterielMove(param).then(res => {
         this.goodsList = res.data.data

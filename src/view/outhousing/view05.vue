@@ -1,7 +1,7 @@
 <template>
  <div>
-     <div class="content" id="header">
-         <div class="table-header">
+     <div class="content">
+         <div class="table-header" id="header">
             <table>
                 <tr>
                     <td class="table-th">货品名称</td>

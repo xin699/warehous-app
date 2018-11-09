@@ -1,5 +1,5 @@
 <template>
- <div>
+ <div class="content">
      <div class="list">
          <div class="table-head">
             <table>
@@ -71,7 +71,7 @@ export default {
       const elementList = document.querySelectorAll('#header')[0].scrollHeight
       const content = document.querySelectorAll('.content')[0].scrollHeight
       this.$refs.good.style.height = ((content - elementList - 50) / 37.5) + 'rem'
-      console.log((content - elementList - 50) / 37.5)
+      console.log(content)
     },
     // loadTop () {
     //   const param = Object.assign({}, this.headerParams, { pageNum: this.currentpageNum, pageSize: this.limit })

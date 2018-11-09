@@ -1,6 +1,6 @@
 <template>
  <div>
-     <div class="content" v-if="!isScan">
+     <div v-if="!isScan">
          <div class="table-header" id="header">
             <table>
                 <tr>
@@ -205,7 +205,7 @@ export default {
         margin-top: 10/@rem;
         text-align: right;
     }
-    .goods {
-        overflow: auto;
-    }
+    // .goods {
+    //     overflow: auto;
+    // }
 </style>
